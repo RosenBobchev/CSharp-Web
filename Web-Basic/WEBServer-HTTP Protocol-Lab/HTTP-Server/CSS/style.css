@@ -1,0 +1,25 @@
+﻿form {
+    width: 50%;
+    margin: 0 auto;
+}
+
+textarea {
+    resize: none;
+}
+
+body {
+    background-color: #F9D977;
+    font-family: Calibri;
+}
+
+main h1 {
+    font-size: 48px;
+}
+
+main span {
+    color: #FEAE00;
+}
+
+input[type=submit]:hover {
+    background-color: #FE7300;
+}
