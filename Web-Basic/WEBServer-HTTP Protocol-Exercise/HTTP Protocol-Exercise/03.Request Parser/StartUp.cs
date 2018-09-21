@@ -17,27 +17,27 @@ namespace _03.Request_Parser
             {
                 var correctInput = input.Split('/', StringSplitOptions.RemoveEmptyEntries);
 
-                var method = correctInput[0];
-                var requestInput = correctInput[1];
+                var path = correctInput[0];
+                var method = correctInput[1];
 
-                if (!requests.ContainsKey(method))
+                if (!requests.ContainsKey(path))
                 {
-                    requests.Add(method, new HashSet<string>());
+                    requests.Add(path, new HashSet<string>());
                 }
 
-                requests[method].Add(requestInput);
+                requests[path].Add(method);
             }
 
             string httpRequest = Console.ReadLine().ToLower();
 
             var parsedHttpRequest = httpRequest.Split(" ", StringSplitOptions.RemoveEmptyEntries);
 
-            var parsedMethod = parsedHttpRequest[1].Trim('/');
-            var parsedRequest = parsedHttpRequest[0];
+            var parsedPath = parsedHttpRequest[1].Trim('/');
+            var parsedMethod = parsedHttpRequest[0];
 
-            if (requests.ContainsKey(parsedMethod))
+            if (requests.ContainsKey(parsedPath))
             {
-                var getRequest = requests[parsedMethod].FirstOrDefault(r => r == parsedRequest);
+                var getRequest = requests[parsedPath].FirstOrDefault(r => r == parsedMethod);
 
                 if (getRequest != null)
                 {
