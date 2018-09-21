@@ -45,7 +45,6 @@ namespace _03.Request_Parser
                     sb.AppendLine("Content-Length: 2");
                     sb.AppendLine("Content-Type: text/plain");
                     sb.AppendLine();
-                    sb.AppendLine();
                     sb.AppendLine("OK");
                 }
                 else
@@ -53,7 +52,6 @@ namespace _03.Request_Parser
                     sb.AppendLine("HTTP/1.1 404 NotFound");
                     sb.AppendLine("Content-Length: 9");
                     sb.AppendLine("Content-Type: text/plain");
-                    sb.AppendLine();
                     sb.AppendLine();
                     sb.AppendLine("NotFound");
                 }
