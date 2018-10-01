@@ -8,7 +8,7 @@ namespace SIS.WebServer
 {
     public class Server
     {
-        private const string LocalHostIpAddress = "127.0.0.1";
+        private const string LocalHostIpAddress = "::1";
 
         private readonly int port;
 
