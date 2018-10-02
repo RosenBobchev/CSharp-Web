@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using SIS.HTTP.Common;
+using SIS.HTTP.Cookies;
+using SIS.HTTP.Cookies.Contracts;
 using SIS.HTTP.Enums;
 using SIS.HTTP.Exceptions;
 using SIS.HTTP.Headers;
 using SIS.HTTP.Headers.Contracts;
 using SIS.HTTP.Requests.Contracts;
+using SIS.HTTP.Sessions.Contracts;
 
 namespace SIS.HTTP.Requests
 {
@@ -17,6 +20,7 @@ namespace SIS.HTTP.Requests
             this.FormData = new Dictionary<string, object>();
             this.QueryData = new Dictionary<string, object>();
             this.Headers = new HttpHeaderCollection();
+            this.Cookies = new HttpCookieCollection();
 
             this.ParseRequest(requestString);
         }
@@ -37,7 +41,37 @@ namespace SIS.HTTP.Requests
             this.ParseRequestPath(requestLine);
 
             this.ParseHeaders(splitRequestContent.Skip(1).ToArray());
+            this.ParseCookies();
+
             this.ParseRequestParameters(splitRequestContent[splitRequestContent.Length - 1]);
+        }
+
+        private void ParseCookies()
+        {
+            if (!this.Headers.ContainsHeader(GlobalConstants.CookieRequestHeaderName))
+            {
+                return;
+            }
+
+            var cookiesRaw = this.Headers.GetHeader(GlobalConstants.CookieRequestHeaderName).Value;
+
+            var cookies = cookiesRaw.Split("; ", StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (var cookie in cookies)
+            {
+                var cookieKeyValuePair = cookie.Split('=', 2);
+
+                if (cookieKeyValuePair.Length != 2)
+                {
+                    throw new BadRequestException();
+                }
+
+                var cookieName = cookieKeyValuePair[0];
+                var cookieValue = cookieKeyValuePair[1];
+                
+
+                this.Cookies.Add(new HttpCookie(cookieName, cookieValue));
+            }
         }
 
         private void ParseRequestParameters(string bodyParameters)
@@ -169,5 +203,9 @@ namespace SIS.HTTP.Requests
         public IHttpHeaderCollection Headers { get; }
 
         public HttpRequestMethod RequestMethod { get; private set; }
+
+        public IHttpCookieCollection Cookies { get; }
+
+        public IHttpSession Session { get; set; }
     }
 }
